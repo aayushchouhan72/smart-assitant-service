@@ -1,0 +1,39 @@
+# ---------- Backend Framework ----------
+
+fastapi
+uvicorn[standard]
+python-multipart
+python-dotenv
+pydantic
+
+# ---------- LLM / AI ----------
+
+langchain
+langchain-core
+langchain-community
+langchain-mistralai
+mistralai
+
+# ---------- Whisper / Speech ----------
+
+openai-whisper
+torch
+torchaudio
+
+# ---------- Audio Processing ----------
+
+pydub
+ffmpeg-python
+
+# ---------- RAG / Embeddings ----------
+
+chromadb
+sentence-transformers
+langchain-huggingface
+langchain-chroma
+
+# ---------- Utilities ----------
+
+requests
+numpy
+tqdm
