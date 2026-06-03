@@ -49,3 +49,4 @@ def chat(data: QueryRequest):
             status_code=500,
             detail=f"Server Error: {str(e)}"
         )
+

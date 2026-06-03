@@ -1,0 +1,15 @@
+project/
+
+backend/
+│
+├── main.py
+├── workflow/
+│   ├── downloader.py
+│   ├── analyzer.py
+│   ├── caption_agent.py
+│   ├── editor.py
+│   ├── email_sender.py
+│   └── cleanup.py
+│
+├── temp_videos/
+└── requirements.txt
