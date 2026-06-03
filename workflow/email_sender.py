@@ -10,6 +10,7 @@ BASE_DIR = os.path.dirname(
     os.path.dirname(__file__)
 )
 
+#  Send email tool 
 @tool
 def send_email(
     receiver_email:str,
