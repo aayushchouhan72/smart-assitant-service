@@ -3,3 +3,4 @@ __pycache__/
 .venv/
 .env
 chroma_db/
+workflow/__pycache__/
