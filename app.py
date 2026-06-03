@@ -7,6 +7,7 @@ from workflow.caption_agent import generate_caption
 from workflow.editor import edit_video
 from workflow.email_sender import send_email
 from workflow.cleanup import cleanup
+from workflow.cloudinary_upload import upload_video
 
 
 def run_workflow(
@@ -74,7 +75,12 @@ def run_workflow(
             f"Edited: {edited_video}"
         )
 
+        print("Video is uploaded to cloudinary...")
+        video_url = upload_video(edited_video)
 
+        print("Video is uploaded to Cloudinary")
+       
+       
 
         print(
             "\nSending email..."
