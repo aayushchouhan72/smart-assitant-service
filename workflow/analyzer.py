@@ -1,59 +1,46 @@
-import os
-import cv2
-import base64
-from groq import Groq
+
+import time
+from google import genai
 from dotenv import load_dotenv
 from langchain.tools import tool
 
 load_dotenv()
 
-client = Groq(
-    api_key=os.getenv("GROQ_API_KEY")
-)
+# Initialize the client (Make sure GEMINI_API_KEY is set in your environment variables)
+client = genai.Client()
+
 
 @tool
 def analyze_video(video_path:str)->str:
-    """Analyze video context."""
+    """Analyze video context.""" 
+    print("Uploading video file...")
+  
 
-    cap = cv2.VideoCapture(video_path)
-
-    success, frame = cap.read()
-
-    if not success:
-        return "Cannot read video."
-
-    frame_path="frame.jpg"
-
-    cv2.imwrite(
-        frame_path,
-        frame
-    )
-
-    with open(frame_path,"rb") as f:
-        image=base64.b64encode(
-            f.read()
-        ).decode()
-
-    response = client.chat.completions.create(
-        model="meta-llama/llama-4-scout-17b-16e-instruct",
-        messages=[
-            {
-                "role":"user",
-                "content":[
-                    {
-                        "type":"text",
-                        "text":"Analyze this video frame."
-                    },
-                    {
-                        "type":"image_url",
-                        "image_url":{
-                            "url":f"data:image/jpeg;base64,{image}"
-                        }
-                    }
-                ]
-            }
+    video_file = client.files.upload(file=video_path)
+    print(f"Uploaded successfully. File URI: {video_file.uri}")
+    
+    while video_file.state.name == "PROCESSING":
+        print("Waiting for video processing...")
+        time.sleep(5)
+        video_file = client.files.get(name=video_file.name)
+    
+    if video_file.state.name == "FAILED":
+        raise ValueError(f"Video processing failed: {video_file.error.message}")
+    
+    print("Analyzing video...")
+    # Step 3: Send the file URI to the model for analysis
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",  # High-speed, low-cost model perfect for automations
+        contents=[
+            video_file, 
+            "Provide a detailed summary of what happens in this video. Provide timestamps for key events."
         ]
     )
+    
+    print("\n--- Analysis Result ---")
+    print(response.text)
+    
+    # Optional Step 4: Clean up the file from Gemini storage if needed
+    client.files.delete(name=video_file.name)
 
-    return response.choices[0].message.content
-
+    return response.text

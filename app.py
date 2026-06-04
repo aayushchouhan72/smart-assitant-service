@@ -76,7 +76,7 @@ def run_workflow(
         )
 
         print("Video is uploaded to cloudinary...")
-        video_url = upload_video(edited_video)
+        video_url = upload_video.invoke({"video_path": edited_video})
 
         print("Video is uploaded to Cloudinary")
        
